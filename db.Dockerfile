@@ -1,6 +1,6 @@
 FROM pgvector/pgvector:pg16
 
-RUN apt-get update && apt-get install -y curl \
+RUN apt-get update && apt-get install -y curl unzip \
     && curl -fsSL https://bun.sh/install | bash \
     && mv /root/.bun/bin/bun /usr/local/bin/bun \
     && rm -rf /var/lib/apt/lists/*

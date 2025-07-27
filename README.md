@@ -127,7 +127,7 @@ docker run --name simstudio-db \
 
 ```bash
 cd apps/sim
-cp .env.example .env  # Configure with required variables (DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL)
+cp .env.example .env  # Update values inside if needed
 ```
 
 Update your `.env` file with the database URL:
@@ -163,6 +163,32 @@ Realtime socket server (from `apps/sim` directory in a separate terminal):
 cd apps/sim
 bun run dev:sockets
 ```
+
+### Rootless Podman Quickstart
+
+Build the images:
+
+```bash
+podman build -f docker/db.Dockerfile -t simstudio-db .
+podman build -f docker/realtime.Dockerfile -t simstudio-realtime .
+podman build -f docker/app.Dockerfile -t simstudio-app .
+```
+
+Create the network:
+
+```bash
+podman network create AINet
+```
+
+Run the containers (order matters):
+
+```bash
+podman run --name simstudio-db --network=AINet --env-file=.env -p 3002:5432 simstudio-db
+podman run --name simstudio-realtime --network=AINet --env-file=.env -p 8001:3002 simstudio-realtime
+podman run --name simstudio-app --network=AINet --env-file=.env -p 4001:3000 simstudio-app
+```
+
+Open <http://localhost:4001/> to use Sim Studio.
 
 ## Tech Stack
 
