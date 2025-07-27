@@ -1,0 +1,160 @@
+import { createEnv } from '@t3-oss/env-nextjs'
+import { env as runtimeEnv } from 'next-runtime-env'
+import { z } from 'zod'
+
+/**
+ * Universal environment variable getter that works in both client and server contexts.
+ * - Client-side: Uses next-runtime-env for runtime injection (supports Docker runtime vars)
+ * - Server-side: Falls back to process.env when runtimeEnv returns undefined
+ * - Provides seamless Docker runtime variable support for NEXT_PUBLIC_ vars
+ */
+const getEnv = (variable: string): string | undefined => {
+  return runtimeEnv(variable) ?? process.env[variable]
+}
+
+export const env = createEnv({
+  skipValidation: true,
+
+  server: {
+    DATABASE_URL: z.string().url(),
+    BETTER_AUTH_URL: z.string().url(),
+    BETTER_AUTH_SECRET: z.string().min(32),
+    DISABLE_REGISTRATION: z.boolean().optional(),
+    ENCRYPTION_KEY: z.string().min(32),
+    INTERNAL_API_SECRET: z.string().min(32),
+
+    POSTGRES_URL: z.string().url().optional(),
+    STRIPE_SECRET_KEY: z.string().min(1).optional(),
+    STRIPE_BILLING_WEBHOOK_SECRET: z.string().min(1).optional(),
+    STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
+    STRIPE_FREE_PRICE_ID: z.string().min(1).optional(),
+    FREE_TIER_COST_LIMIT: z.number().optional(),
+    STRIPE_PRO_PRICE_ID: z.string().min(1).optional(),
+    PRO_TIER_COST_LIMIT: z.number().optional(),
+    STRIPE_TEAM_PRICE_ID: z.string().min(1).optional(),
+    TEAM_TIER_COST_LIMIT: z.number().optional(),
+    STRIPE_ENTERPRISE_PRICE_ID: z.string().min(1).optional(),
+    ENTERPRISE_TIER_COST_LIMIT: z.number().optional(),
+    RESEND_API_KEY: z.string().min(1).optional(),
+    EMAIL_DOMAIN: z.string().min(1).optional(),
+    OPENAI_API_KEY: z.string().min(1).optional(),
+    OPENAI_API_KEY_1: z.string().min(1).optional(),
+    OPENAI_API_KEY_2: z.string().min(1).optional(),
+    OPENAI_API_KEY_3: z.string().min(1).optional(),
+    MISTRAL_API_KEY: z.string().min(1).optional(),
+    ANTHROPIC_API_KEY_1: z.string().min(1).optional(),
+    ANTHROPIC_API_KEY_2: z.string().min(1).optional(),
+    ANTHROPIC_API_KEY_3: z.string().min(1).optional(),
+    FREESTYLE_API_KEY: z.string().min(1).optional(),
+    TELEMETRY_ENDPOINT: z.string().url().optional(),
+    COST_MULTIPLIER: z.number().optional(),
+    JWT_SECRET: z.string().min(1).optional(),
+    BROWSERBASE_API_KEY: z.string().min(1).optional(),
+    BROWSERBASE_PROJECT_ID: z.string().min(1).optional(),
+    OLLAMA_URL: z.string().url().optional(),
+    SENTRY_ORG: z.string().optional(),
+    SENTRY_PROJECT: z.string().optional(),
+    SENTRY_AUTH_TOKEN: z.string().optional(),
+    REDIS_URL: z.string().url().optional(),
+    NEXT_RUNTIME: z.string().optional(),
+    VERCEL_ENV: z.string().optional(),
+
+    // Trigger.dev
+    TRIGGER_SECRET_KEY: z.string().min(1).optional(),
+
+    // Storage
+    AWS_REGION: z.string().optional(),
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
+    S3_BUCKET_NAME: z.string().optional(),
+    S3_LOGS_BUCKET_NAME: z.string().optional(),
+    S3_KB_BUCKET_NAME: z.string().optional(),
+    AZURE_ACCOUNT_NAME: z.string().optional(),
+    AZURE_ACCOUNT_KEY: z.string().optional(),
+    AZURE_CONNECTION_STRING: z.string().optional(),
+    AZURE_STORAGE_CONTAINER_NAME: z.string().optional(),
+    AZURE_STORAGE_KB_CONTAINER_NAME: z.string().optional(),
+
+    // Miscellaneous
+    CRON_SECRET: z.string().optional(),
+    FREE_PLAN_LOG_RETENTION_DAYS: z.string().optional(),
+    GITHUB_TOKEN: z.string().optional(),
+    ELEVENLABS_API_KEY: z.string().min(1).optional(),
+    AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
+    AZURE_OPENAI_API_VERSION: z.string().optional(),
+
+    // OAuth blocks (all optional)
+    GOOGLE_CLIENT_ID: z.string().optional(),
+    GOOGLE_CLIENT_SECRET: z.string().optional(),
+    GITHUB_CLIENT_ID: z.string().optional(),
+    GITHUB_CLIENT_SECRET: z.string().optional(),
+    GITHUB_REPO_CLIENT_ID: z.string().optional(),
+    GITHUB_REPO_CLIENT_SECRET: z.string().optional(),
+    X_CLIENT_ID: z.string().optional(),
+    X_CLIENT_SECRET: z.string().optional(),
+    CONFLUENCE_CLIENT_ID: z.string().optional(),
+    CONFLUENCE_CLIENT_SECRET: z.string().optional(),
+    JIRA_CLIENT_ID: z.string().optional(),
+    JIRA_CLIENT_SECRET: z.string().optional(),
+    AIRTABLE_CLIENT_ID: z.string().optional(),
+    AIRTABLE_CLIENT_SECRET: z.string().optional(),
+    SUPABASE_CLIENT_ID: z.string().optional(),
+    SUPABASE_CLIENT_SECRET: z.string().optional(),
+    NOTION_CLIENT_ID: z.string().optional(),
+    NOTION_CLIENT_SECRET: z.string().optional(),
+    DISCORD_CLIENT_ID: z.string().optional(),
+    DISCORD_CLIENT_SECRET: z.string().optional(),
+    MICROSOFT_CLIENT_ID: z.string().optional(),
+    MICROSOFT_CLIENT_SECRET: z.string().optional(),
+    HUBSPOT_CLIENT_ID: z.string().optional(),
+    HUBSPOT_CLIENT_SECRET: z.string().optional(),
+    WEALTHBOX_CLIENT_ID: z.string().optional(),
+    WEALTHBOX_CLIENT_SECRET: z.string().optional(),
+    DOCKER_BUILD: z.boolean().optional(),
+    LINEAR_CLIENT_ID: z.string().optional(),
+    LINEAR_CLIENT_SECRET: z.string().optional(),
+    SLACK_CLIENT_ID: z.string().optional(),
+    SLACK_CLIENT_SECRET: z.string().optional(),
+    REDDIT_CLIENT_ID: z.string().optional(),
+    REDDIT_CLIENT_SECRET: z.string().optional(),
+    SOCKET_SERVER_URL: z.string().url().optional(),
+    SOCKET_PORT: z.number().optional(),
+    PORT: z.number().optional(),
+    ALLOWED_ORIGINS: z.string().optional(),
+    JOB_RETENTION_DAYS: z.string().optional().default('1'),
+  },
+
+  client: {
+    NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
+    NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().optional(),
+    NEXT_PUBLIC_GOOGLE_API_KEY: z.string().optional(),
+    NEXT_PUBLIC_GOOGLE_PROJECT_NUMBER: z.string().optional(),
+    NEXT_PUBLIC_SOCKET_URL: z.string().url().optional(),
+  },
+
+  // Variables available on both server and client
+  shared: {
+    NODE_ENV: z.enum(['development', 'test', 'production']).optional(),
+    NEXT_TELEMETRY_DISABLED: z.string().optional(),
+  },
+
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    NEXT_PUBLIC_GOOGLE_PROJECT_NUMBER: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_NUMBER,
+    NEXT_PUBLIC_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
+  },
+})
+
+// Needing this utility because t3-env is returning string for boolean values.
+export const isTruthy = (value: string | boolean | number | undefined) =>
+  typeof value === 'string' ? value === 'true' || value === '1' : Boolean(value)
+
+export { getEnv }

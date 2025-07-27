@@ -1,0 +1,23 @@
+{
+  "title": "Sim Studio Documentation",
+  "pages": [
+    "---Introduction---",
+    "./introduction/index",
+    "./getting-started/index",
+    "---Create---",
+    "triggers",
+    "blocks",
+    "tools",
+    "---Connections---",
+    "connections",
+    "---Execution---",
+    "execution",
+    "---Advanced---",
+    "./variables/index",
+    "yaml",
+    "---SDKs---",
+    "./sdks/python",
+    "./sdks/typescript"
+  ],
+  "defaultOpen": true
+}

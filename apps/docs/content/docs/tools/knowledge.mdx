@@ -1,0 +1,161 @@
+---
+title: Knowledge
+description: Use vector search
+---
+
+import { BlockInfoCard } from "@/components/ui/block-info-card"
+
+<BlockInfoCard 
+  type="knowledge"
+  color="#00B0B0"
+  icon={true}
+  iconSvg={`<svg className="block-icon"
+      
+      xmlns='http://www.w3.org/2000/svg'
+      
+      
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    >
+      <path d='M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14' />
+      <path d='m7.5 4.27 9 5.15' />
+      <polyline points='3.29 7 12 12 20.71 7' />
+      <line x1='12' x2='12' y1='22' y2='12' />
+      <circle cx='18.5' cy='15.5' r='2.5' />
+      <path d='M20.27 17.27 22 19' />
+    </svg>`}
+/>
+
+{/* MANUAL-CONTENT-START:intro */}
+Sim Studio's Knowledge Base is a powerful native feature that enables you to create, manage, and query custom knowledge bases directly within the platform. Using advanced AI embeddings and vector search technology, the Knowledge Base block allows you to build intelligent search capabilities into your workflows, making it easy to find and utilize relevant information across your organization.
+
+The Knowledge Base system provides a comprehensive solution for managing organizational knowledge through its flexible and scalable architecture. With its built-in vector search capabilities, teams can perform semantic searches that understand meaning and context, going beyond traditional keyword matching.
+
+Key features of the Knowledge Base include:
+
+- Semantic Search: Advanced AI-powered search that understands meaning and context, not just keywords
+- Vector Embeddings: Automatic conversion of text into high-dimensional vectors for intelligent similarity matching
+- Custom Knowledge Bases: Create and manage multiple knowledge bases for different purposes or departments
+- Flexible Content Types: Support for various document formats and content types
+- Real-time Updates: Immediate indexing of new content for instant searchability
+
+In Sim Studio, the Knowledge Base block enables your agents to perform intelligent semantic searches across your custom knowledge bases. This creates opportunities for automated information retrieval, content recommendations, and knowledge discovery as part of your AI workflows. The integration allows agents to search and retrieve relevant information programmatically, facilitating automated knowledge management tasks and ensuring that important information is easily accessible. By leveraging the Knowledge Base block, you can build intelligent agents that enhance information discovery while automating routine knowledge management tasks, improving team efficiency and ensuring consistent access to organizational knowledge.
+{/* MANUAL-CONTENT-END */}
+
+
+## Usage Instructions
+
+Perform semantic vector search across knowledge bases, upload individual chunks to existing documents, or create new documents from text content. Uses advanced AI embeddings to understand meaning and context for search operations.
+
+
+
+## Tools
+
+### `knowledge_search`
+
+Search for similar content in one or more knowledge bases using vector similarity
+
+#### Input
+
+| Parameter | Type | Required | Description |
+| --------- | ---- | -------- | ----------- |
+| `knowledgeBaseIds` | string | Yes | ID of the knowledge base to search in, or comma-separated IDs for multiple knowledge bases |
+| `query` | string | Yes | Search query text |
+| `topK` | number | No | Number of most similar results to return \(1-100\) |
+| `tag1` | string | No | Filter by tag 1 value |
+| `tag2` | string | No | Filter by tag 2 value |
+| `tag3` | string | No | Filter by tag 3 value |
+| `tag4` | string | No | Filter by tag 4 value |
+| `tag5` | string | No | Filter by tag 5 value |
+| `tag6` | string | No | Filter by tag 6 value |
+| `tag7` | string | No | Filter by tag 7 value |
+
+#### Output
+
+| Parameter | Type |
+| --------- | ---- |
+| `results` | string |
+| `query` | string |
+| `totalResults` | string |
+| `cost` | string |
+
+### `knowledge_upload_chunk`
+
+Upload a new chunk to a document in a knowledge base
+
+#### Input
+
+| Parameter | Type | Required | Description |
+| --------- | ---- | -------- | ----------- |
+| `knowledgeBaseId` | string | Yes | ID of the knowledge base containing the document |
+| `documentId` | string | Yes | ID of the document to upload the chunk to |
+| `content` | string | Yes | Content of the chunk to upload |
+
+#### Output
+
+| Parameter | Type |
+| --------- | ---- |
+| `data` | string |
+| `chunkIndex` | string |
+| `content` | string |
+| `contentLength` | string |
+| `tokenCount` | string |
+| `enabled` | string |
+| `createdAt` | string |
+| `updatedAt` | string |
+
+### `knowledge_create_document`
+
+Create a new document in a knowledge base
+
+#### Input
+
+| Parameter | Type | Required | Description |
+| --------- | ---- | -------- | ----------- |
+| `knowledgeBaseId` | string | Yes | ID of the knowledge base containing the document |
+| `name` | string | Yes | Name of the document |
+| `content` | string | Yes | Content of the document |
+| `tag1` | string | No | Tag 1 value for the document |
+| `tag2` | string | No | Tag 2 value for the document |
+| `tag3` | string | No | Tag 3 value for the document |
+| `tag4` | string | No | Tag 4 value for the document |
+| `tag5` | string | No | Tag 5 value for the document |
+| `tag6` | string | No | Tag 6 value for the document |
+| `tag7` | string | No | Tag 7 value for the document |
+
+#### Output
+
+| Parameter | Type |
+| --------- | ---- |
+| `data` | string |
+| `name` | string |
+
+
+
+## Block Configuration
+
+### Input
+
+| Parameter | Type | Required | Description | 
+| --------- | ---- | -------- | ----------- | 
+| `operation` | string | Yes | Operation |
+
+
+
+### Outputs
+
+| Output | Type | Description |
+| ------ | ---- | ----------- |
+| `results` | json | results output from the block |
+| `query` | string | query output from the block |
+| `totalResults` | number | totalResults output from the block |
+
+
+## Notes
+
+- Category: `blocks`
+- Type: `knowledge`
