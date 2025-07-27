@@ -1,28 +1,19 @@
-# ========================================
-# Dependencies Stage: Install Dependencies
-# ========================================
-FROM oven/bun:alpine AS deps
+FROM pgvector/pgvector:pg16
+
+RUN apt-get update && apt-get install -y curl \
+    && curl -fsSL https://bun.sh/install | bash \
+    && mv /root/.bun/bin/bun /usr/local/bin/bun \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy only package files needed for migrations
-COPY package.json bun.lock turbo.json ./
-COPY apps/sim/package.json ./apps/sim/db/
+COPY bun.lock package.json ./
+RUN bun install --omit dev --ignore-scripts drizzle-kit drizzle-orm postgres next-runtime-env zod @t3-oss/env-nextjs
 
-# Install minimal dependencies in one layer
-RUN bun install --omit dev --ignore-scripts && \
-    bun install --omit dev --ignore-scripts drizzle-kit drizzle-orm postgres next-runtime-env zod @t3-oss/env-nextjs
-
-# ========================================
-# Runner Stage: Production Environment
-# ========================================
-FROM oven/bun:alpine AS runner
-WORKDIR /app
-
-# Copy only the necessary files from deps
-COPY --from=deps /app/node_modules ./node_modules
+COPY apps/sim/package.json ./apps/sim/package.json
 COPY apps/sim/drizzle.config.ts ./apps/sim/drizzle.config.ts
 COPY apps/sim/db ./apps/sim/db
-COPY apps/sim/package.json ./apps/sim/package.json
 COPY apps/sim/lib/env.ts ./apps/sim/lib/env.ts
+COPY docker/db-entrypoint.sh /usr/local/bin/db-entrypoint.sh
 
-WORKDIR /app/apps/sim
+ENTRYPOINT ["/usr/local/bin/db-entrypoint.sh"]
